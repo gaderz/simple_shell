@@ -4,8 +4,7 @@ char *fill_path_dir(char *path);
 list_t *get_path_dir(char *path);
 
 /**
- * get_location - searches for the location of
- * a given command in PATH directories
+ * get_location - searches for the location of a given command in PATH directories
  * @command: the command to search for
  *
  * Return: a pointer to the location of the command, or NULL if not found
@@ -34,6 +33,7 @@ char *get_location(char *command)
 		if (!temp)
 			return (NULL);
 
+		/* Concatenate the directory path and the command name to create the full path */
 		_strcpy(temp, dirs->dir);
 		_strcat(temp, "/");
 		_strcat(temp, command);
@@ -62,8 +62,7 @@ char *get_location(char *command)
  * fill_path_dir - fills empty PATH directories with PWD
  * @path: the PATH environment variable
  *
- * Return: a pointer to a new string with
- * filled in directories, or NULL on failure
+ * Return: a pointer to a new string with filled in directories, or NULL on failure
  */
 char *fill_path_dir(char *path)
 {
@@ -125,46 +124,45 @@ char *fill_path_dir(char *path)
 	return (path_copy);
 }
 /**
-* get_path_dir - creates a linked list of directories in the PATH variable
-* @path: the PATH environment variable
-*
-* Return: a pointer to a new list_t struct, or NULL on failure
-*/
+ * get_path_dir - creates a linked list of directories in the PATH variable
+ * @path: the PATH environment variable
+ *
+ * Return: a pointer to a new list_t struct, or NULL on failure
+ */
 list_t *get_path_dir(char *path)
 {
-	/* Declare variables */
-	int index = 0;
-	char **dirs = NULL, *path_copy = NULL;
-	list_t *head = NULL;
+        /* Declare variables */
+        int index = 0;
+        char **dirs = NULL, *path_copy = NULL;
+        list_t *head = NULL;
 
-	/* Fill in any empty directories in the PATH variable */
-	path_copy = fill_path_dir(path);
-	if (!path_copy)
-		return (NULL);
+        /* Fill in any empty directories in the PATH variable */
+        path_copy = fill_path_dir(path);
+        if (!path_copy)
+                return (NULL);
 
-	/* Split the PATH variable into an array of directories */
-	dirs = _strtok(path_copy, ":");
-	free(path_copy);
-	if (!dirs)
-		return (NULL);
+        /* Split the PATH variable into an array of directories */
+        dirs = _strtok(path_copy, ":");
+        free(path_copy);
+        if (!dirs)
+                return (NULL);
 
-	/* Add each directory to the linked list */
-	while (dirs[index]
-	{
-		if (add_node_end(&head, dirs[index]) == NULL)
-		{
-			/* If adding a node fails, free the list and return NULL */
-			free_list(head);
-			free(dirs);
-			return (NULL);
-		}
-		index++;
-	}
+        /* Add each directory to the linked list */
+        while (dirs[index])
+        {
+                if (add_node_end(&head, dirs[index]) == NULL)
+                {
+                        /* If adding a node fails, free the list and return NULL */
+                        free_list(head);
+                        free(dirs);
+                        return (NULL);
+                }
+                index++;
+        }
 
-	free(dirs);
+        free(dirs);
 
-	/* Return the linked list */
-	return (head);
+        /* Return the linked list */
+        return (head);
 }
-
 

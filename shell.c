@@ -7,20 +7,19 @@ int execute(char **args, char **front);
  * sig_handler - Signal handler function for SIGINT
  * @sig: The signal integer
  *
- * Description: This function is called when the
- * user enters a SIGINT signal (usually by pressing Ctrl-C).
+ * Description: This function is called when the user enters a SIGINT signal (usually by pressing Ctrl-C).
  * It prints a new prompt on a new line and resumes waiting for user input.
  */
 void sig_handler(int sig)
 {
-	char *new_prompt = "\n#cisfun$ ";
+        char *new_prompt = "\n#cisfun$ ";
        /*	New prompt to be displayed*/
 
-	(void)sig;
+        (void)sig;
 	/*Suppress unused parameter warning*/
-	signal(SIGINT, sig_handler);
+        signal(SIGINT, sig_handler);
 	/*Reinstall the signal handler*/
-	 write(STDIN_FILENO, new_prompt, 10);
+        write(STDIN_FILENO, new_prompt, 10);
 	/* Write the new prompt to the standard output */
 }
 /**
@@ -80,61 +79,61 @@ int execute(char **args, char **front)
 	return (ret);
 }
 /**
-* main - Entry point for shell program
-* @argc: number of command line arguments
-* @argv: array of command line arguments
-*
-* Return: 0 on success
-*/
+ * main - Entry point for shell program
+ * @argc: number of command line arguments
+ * @argv: array of command line arguments
+ *
+ * Return: 0 on success
+ */
 int main(int argc, char *argv[])
 {
-	int exe_ret_val = 0, retn_val;
-	int *exe_ret = &retn_val;
-	char *promt = "#cisfun$ ", *new_ln = "\n";
+    int exe_ret_val = 0, retn_val;
+    int *exe_ret = &retn_val;
+    char *promt = "#cisfun$ ", *new_ln = "\n";
 
-	name = argv[0];
-	hist = 1;
-	aliases = NULL;
-	signal(SIGINT, sig_handler);
+    name = argv[0];
+    hist = 1;
+    aliases = NULL;
+    signal(SIGINT, sig_handler);
 
-	*exe_ret = 0;
-	environ = _copyenv();
-	if (!environ)
-	exit(-100);
+    *exe_ret = 0;
+    environ = _copyenv();
+    if (!environ)
+        exit(-100);
 
-	if (argc != 1)
-	{
-	exe_ret_val = proc_file_commands(argv[1], exe_ret);
-	free_env();
-	free_alias_list(aliases);
-	return (*exe_ret);
-	}
+    if (argc != 1)
+    {
+        exe_ret_val = proc_file_commands(argv[1], exe_ret);
+        free_env();
+        free_alias_list(aliases);
+        return (*exe_ret);
+    }
 
-	if (!isatty(STDIN_FILENO))
-	{
-	do {
-		exe_ret_val = handle_args(exe_ret);
-	} while (exe_ret_val != END_OF_FILE && exe_ret_val != EXIT);
-	free_env();
-	free_alias_list(aliases);
-	return (*exe_ret);
-	}
+    if (!isatty(STDIN_FILENO))
+    {
+        do {
+            exe_ret_val = handle_args(exe_ret);
+        } while (exe_ret_val != END_OF_FILE && exe_ret_val != EXIT);
+        free_env();
+        free_alias_list(aliases);
+        return (*exe_ret);
+    }
 
-	for (;;)
-	{
-	write(STDOUT_FILENO, promt, 10);
-	xe_ret_val = handle_args(exe_ret);
-	if (exe_ret_val == END_OF_FILE || exe_ret_val == EXIT)
-	{
-		if (exe_ret_val == END_OF_FILE)
-			write(STDOUT_FILENO, new_ln, 10);
-		free_env();
-		free_alias_list(aliases);
-			return (*exe_ret);
-		}
-	}
+    for (;;)
+    {
+        write(STDOUT_FILENO, promt, 10);
+        exe_ret_val = handle_args(exe_ret);
+        if (exe_ret_val == END_OF_FILE || exe_ret_val == EXIT)
+        {
+            if (exe_ret_val == END_OF_FILE)
+                write(STDOUT_FILENO, new_ln, 10);
+            free_env();
+            free_alias_list(aliases);
+            return (*exe_ret);
+        }
+    }
 
-	free_env();
-	free_alias_list(aliases);
-	return (*exe_ret);
-}
+    free_env();
+    free_alias_list(aliases);
+    return (*exe_ret);
+}}
