@@ -5,76 +5,77 @@ int shellby_cd(char **args, char __attribute__((__unused__)) **front);
 int shellby_help(char **args, char __attribute__((__unused__)) **front);
 
 /**
-* get_builtin - a command with a corresponding
-*               shell builtin function.
-* @command: The command to match.
-*
-* Return: A function pointer to the corresponding builtin.
-*/
+ * get_builtin - a command with a corresponding
+ *               shell builtin function.
+ * @command: The command to match.
+ *
+ * Return: A function pointer to the corresponding builtin.
+ */
 int (*get_builtin(char *command))(char **args, char **front)
-	builtin_t funcs[] = {
-		{ "exit", shellby_exit },
-		{ "env", shellby_env },
-		{ "setenv", shellby_setenv },
-		{ "unsetenv", shellby_unsetenv },
-		{ "cd", shellby_cd },
-		{ "alias", shellby_alias },
-		{ "help", shellby_help },
-		{ NULL, NULL }
-	};
-	int i = 0;
+{
+        builtin_t funcs[] = {
+                { "exit", shellby_exit },
+                { "env", shellby_env },
+                { "setenv", shellby_setenv },
+                { "unsetenv", shellby_unsetenv },
+                { "cd", shellby_cd },
+                { "alias", shellby_alias },
+                { "help", shellby_help },
+                { NULL, NULL }
+        };
+        int i = 0;
 
-	while (funcs[i].name != NULL)
-	{
-		if (_strcmp(funcs[i].name, command) == 0)
-			break;
-		i++;
-	}
-	return (funcs[i].f);
+        while (funcs[i].name != NULL)
+        {
+                if (_strcmp(funcs[i].name, command) == 0)
+                        break;
+                i++;
+        }
+        return (funcs[i].f);
 }
 /**
-* shellby_exit - this cmd Causes normal process to exit
-* @args: An array of pointers with  the exit value.
-* @front: pointer to the beginning of args.
-*
-* Return: If there are no arguments - -3.
-*         If the given exit value is invalid - 2.
-*         O/w - exits with the given status value.
-*
-* Description: Upon returning -3, the program exits back in the main function.
-*/
+ * shellby_exit - this cmd Causes normal process to exit
+ * @args: An array of pointers with  the exit value.
+ * @front: pointer to the beginning of args.
+ *
+ * Return: If there are no arguments - -3.
+ *         If the given exit value is invalid - 2.
+ *         O/w - exits with the given status value.
+ *
+ * Description: Upon returning -3, the program exits back in the main function.
+ */
 int shellby_exit(char **args, char **front)
 {
-	int lv = 0, length = 10;
-	unsigned int n = 0, max = 1 << (sizeof(int) * 8 - 1);
+        int lv = 0, length = 10;
+        unsigned int n = 0, max = 1 << (sizeof(int) * 8 - 1);
 
-	if (args[0])
-	{
-		if (args[0][0] == '+')
-		{
-			lv = 1;
-			length++;
-		}
-		while (args[0][lv])
-		{
-			if (lv <= length && args[0][lv] >= '0' && args[0][lv] <= '9')
-				n = (n * 10) + (args[0][lv] - '0');
-			else
-				return (create_error(--args, 2));
-			lv++;
-		}
-	}
-	else
-	{
-		return (-3);
-	}
-	if (n > max - 1)
-		return (create_error(--args, 2));
-	args -= 1;
-	free_args(args, front);
-	free_env();
-	free_alias_list(aliases);
-	exit(n);
+        if (args[0])
+        {
+                if (args[0][0] == '+')
+                {
+                        lv = 1;
+                        length++;
+                }
+                while (args[0][lv])
+                {
+                        if (lv <= length && args[0][lv] >= '0' && args[0][lv] <= '9')
+                                n = (n * 10) + (args[0][lv] - '0');
+                        else
+                                return (create_error(--args, 2));
+                        lv++;
+                }
+        }
+        else
+        {
+                return (-3);
+        }
+        if (n > max - 1)
+                return (create_error(--args, 2));
+        args -= 1;
+        free_args(args, front);
+        free_env();
+        free_alias_list(aliases);
+        exit(n);
 }
 /**
  * shellby_cd - the  cd command  Changes the current directory

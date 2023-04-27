@@ -140,8 +140,3 @@ int proc_file_commands(char *file_path, int *exe_ret)
     free(front);
     return (exit_status);
 }
-Footer
-© 2023 GitHub, Inc.
-Footer navigation
-
-    Terms
